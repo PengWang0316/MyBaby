@@ -1,6 +1,7 @@
 package com.pengwang.mybaby.domain.executor.Impl;
 
 import com.pengwang.mybaby.domain.executor.Executor;
+import com.pengwang.mybaby.domain.interactors.Interactor;
 import com.pengwang.mybaby.domain.interactors.base.AbstractInteractor;
 
 import java.util.concurrent.BlockingQueue;
@@ -13,7 +14,7 @@ import java.util.concurrent.TimeUnit;
  * Use ThreadPoolExecutor to run the code in background
  */
 
-public class ThreadExecutor implements Executor {
+public class  ThreadExecutor implements Executor {
 
     //    Keep it singleton
     private static volatile ThreadExecutor mThreadExecutor;
@@ -36,7 +37,7 @@ public class ThreadExecutor implements Executor {
 
     //    Run interactor's code in background
     @Override
-    public void execute(final AbstractInteractor interactor) {
+    public void execute(final Interactor interactor) {
         mThreadPoolExecutor.submit(new Runnable() {
             @Override
             public void run() {

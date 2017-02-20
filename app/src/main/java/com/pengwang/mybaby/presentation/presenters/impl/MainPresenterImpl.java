@@ -10,6 +10,8 @@ import com.pengwang.mybaby.presentation.presenters.MainPresenter;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 /**
  * Created by Peng on 2/12/2017.
  * Main presenter implement.
@@ -34,7 +36,6 @@ public class MainPresenterImpl extends AbstractPresenter implements MainPresente
         GetInitialRecordsInteractor interactor = new GetInitialRecordsInteractorImpl(mExecutor, mMainThread,
                 mRecordRepository, this);
         interactor.execute();
-
     }
 
     //    After interactor get the result, this callback will be called to update view

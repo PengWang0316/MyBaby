@@ -8,4 +8,7 @@ package com.pengwang.mybaby.domain.interactors;
 public interface Interactor {
 
     void execute();
+    void cancel();
+    void onFinished();
+    void run();
 }

@@ -13,6 +13,7 @@ import com.pengwang.mybaby.domain.interactors.Interactor;
  */
 
 public abstract class AbstractInteractor implements Interactor {
+
     private Executor mExecutor;
     protected MainThread mMainThread;
 
@@ -26,6 +27,7 @@ public abstract class AbstractInteractor implements Interactor {
     }
 
     //When run a test, call this method directly.
+    @Override
     public abstract void run();
 
     public boolean isRunning() {
@@ -33,14 +35,14 @@ public abstract class AbstractInteractor implements Interactor {
     }
 
     //Cancel the task
+    @Override
     public void cancel() {
-
         isRunning = false;
         isCanceled = true;
-
     }
 
     //Call this method when executor finish its task
+    @Override
     public void onFinished() {
         isRunning = false;
         isCanceled = false;
