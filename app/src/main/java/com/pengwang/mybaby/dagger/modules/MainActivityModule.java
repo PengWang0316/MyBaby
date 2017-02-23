@@ -3,6 +3,8 @@ package com.pengwang.mybaby.dagger.modules;
 import com.pengwang.mybaby.dagger.scopes.MainActivityScope;
 import com.pengwang.mybaby.domain.executor.Executor;
 import com.pengwang.mybaby.domain.executor.MainThread;
+import com.pengwang.mybaby.domain.interactors.GetInitialRecordsInteractor;
+import com.pengwang.mybaby.domain.interactors.impl.GetInitialRecordsInteractorImpl;
 import com.pengwang.mybaby.domain.repository.RecordRepository;
 import com.pengwang.mybaby.presentation.presenters.MainPresenter;
 import com.pengwang.mybaby.presentation.presenters.impl.MainPresenterImpl;
@@ -22,14 +24,18 @@ public class MainActivityModule {
         this.view = view;
     }
 
-//    Clean architecture requires use interface to reduce dependency.
+    //    Clean architecture requires use interface to reduce dependency.
 //    So, here cannot use instructor inject.
 //    MainPresenterImpl has to be initiated manually.
     @Provides
     @MainActivityScope
     MainPresenter mainPresenter(Executor executor, MainThread mainThread, MainPresenter.View view, RecordRepository
             recordRepository) {
-        return new MainPresenterImpl(executor, mainThread, view, recordRepository);
+        MainPresenterImpl mainPresenter = new MainPresenterImpl(executor, mainThread, view);
+//        set all interactor here in order to test.
+        mainPresenter.setGetInitialRecordsInteractor(new GetInitialRecordsInteractorImpl(executor, mainThread,
+                recordRepository, mainPresenter));
+        return mainPresenter;
     }
 
     @Provides

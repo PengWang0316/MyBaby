@@ -30,9 +30,11 @@ public abstract class AbstractInteractor implements Interactor {
     @Override
     public abstract void run();
 
-    public boolean isRunning() {
+    boolean isRunning() {
         return isRunning;
     }
+
+    boolean isCanceled(){return isCanceled;}
 
     //Cancel the task
     @Override

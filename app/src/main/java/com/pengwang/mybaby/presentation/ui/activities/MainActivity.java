@@ -1,22 +1,17 @@
 package com.pengwang.mybaby.presentation.ui.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 
 import com.pengwang.mybaby.R;
 import com.pengwang.mybaby.application.MyApplication;
-import com.pengwang.mybaby.dagger.componets.DaggerApplicationComponent;
 import com.pengwang.mybaby.dagger.componets.DaggerMainActivityComponent;
 import com.pengwang.mybaby.dagger.componets.MainActivityComponent;
 import com.pengwang.mybaby.dagger.modules.MainActivityModule;
-import com.pengwang.mybaby.domain.executor.Impl.ThreadExecutor;
 import com.pengwang.mybaby.domain.models.Record;
 import com.pengwang.mybaby.presentation.presenters.MainPresenter;
-import com.pengwang.mybaby.presentation.presenters.impl.MainPresenterImpl;
-import com.pengwang.mybaby.storage.RecordRepositoryImpl;
-import com.pengwang.mybaby.threading.MainThreadImpl;
 
 import java.util.List;
 

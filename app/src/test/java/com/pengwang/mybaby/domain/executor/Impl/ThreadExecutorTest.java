@@ -1,8 +1,10 @@
 package com.pengwang.mybaby.domain.executor.Impl;
 
 import com.pengwang.mybaby.domain.executor.Executor;
+import com.pengwang.mybaby.domain.interactors.Interactor;
 
 import org.junit.Test;
+import static org.mockito.Mockito.*;
 
 import static org.junit.Assert.*;
 
@@ -21,8 +23,16 @@ public class ThreadExecutorTest {
     }
 
     @Test
+//    Due to this method is asynchronous, the tes may fail.
     public void getInstance() throws Exception {
 
+//        Executor executor1=ThreadExecutor.getInstance();
+//        Interactor interactor= mock(Interactor.class);
+//
+//        executor1.execute(interactor);
+//
+//        verify(interactor).run();
+//        verify(interactor).onFinished();
     }
 
 }

@@ -23,7 +23,8 @@ public class GetInitialRecordsInteractorImpl extends AbstractInteractor implemen
     public GetInitialRecordsInteractorImpl(Executor executor, MainThread mainThread, RecordRepository
             recordRepository, Callback callback){
         super(executor,mainThread);
-        if (recordRepository==null || callback==null) throw new IllegalArgumentException(THE_MESSAGE_OF_ILLEGAL_ARGUMENT);
+        if (recordRepository==null || callback==null) throw new IllegalArgumentException
+                (THE_MESSAGE_OF_ILLEGAL_ARGUMENT);
         mCallBack=callback;
         mRecordRepository=recordRepository;
     }
