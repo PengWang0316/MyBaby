@@ -24,6 +24,8 @@ public class MyApplication extends Application {
     @Inject
     MainThread mainThread;
 
+    private String username;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -41,5 +43,13 @@ public class MyApplication extends Application {
 
     public static MyApplication getApplication(Activity activity) {
         return (MyApplication) activity.getApplication();
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
