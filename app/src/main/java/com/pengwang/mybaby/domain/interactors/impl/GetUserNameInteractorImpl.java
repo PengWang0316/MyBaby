@@ -8,7 +8,7 @@ import com.pengwang.mybaby.domain.repository.SharaPreferencesRepository;
 
 /**
  * Created by Peng on 2/24/2017.
- * Implement for GetUserNameInterator
+ * Implement for GetUserNameInteractor
  */
 public class GetUserNameInteractorImpl extends AbstractInteractor implements GetUserNameInteractor {
     private static final String ILLEGAL_ARGUMENT = "Illegal Argument!";
