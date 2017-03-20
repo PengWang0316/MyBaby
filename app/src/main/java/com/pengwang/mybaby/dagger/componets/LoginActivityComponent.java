@@ -1,6 +1,8 @@
 package com.pengwang.mybaby.dagger.componets;
 
+import com.pengwang.mybaby.dagger.modules.DatabaseRepositoryModule;
 import com.pengwang.mybaby.dagger.modules.LoginActivityModule;
+import com.pengwang.mybaby.dagger.modules.SharaPreferencesRepositoryModule;
 import com.pengwang.mybaby.dagger.scopes.LoginActivityScope;
 import com.pengwang.mybaby.presentation.ui.activities.LoginActivity;
 
@@ -11,7 +13,9 @@ import dagger.Component;
  * The component for Login activity
  */
 @LoginActivityScope
-@Component (modules = {LoginActivityModule.class},dependencies = ApplicationComponent.class)
+@Component (modules = {LoginActivityModule.class, SharaPreferencesRepositoryModule.class, DatabaseRepositoryModule
+        .class},dependencies =
+        ApplicationComponent.class)
 public interface LoginActivityComponent {
     void inject(LoginActivity loginActivity);
 }

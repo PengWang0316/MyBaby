@@ -3,10 +3,13 @@ package com.pengwang.mybaby.application;
 import android.app.Activity;
 import android.app.Application;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.pengwang.mybaby.dagger.componets.ApplicationComponent;
 import com.pengwang.mybaby.dagger.componets.DaggerApplicationComponent;
 import com.pengwang.mybaby.domain.executor.Executor;
 import com.pengwang.mybaby.domain.executor.MainThread;
+import com.pengwang.mybaby.domain.models.User;
 
 import javax.inject.Inject;
 
@@ -24,12 +27,19 @@ public class MyApplication extends Application {
     @Inject
     MainThread mainThread;
 
-    private String username;
+    private User user;
 
     @Override
     public void onCreate() {
         super.onCreate();
+
         initiateDaggerComponent();
+        initiateFacebookLogging();
+    }
+
+    private void initiateFacebookLogging() {
+//        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
     }
 
     private void initiateDaggerComponent() {
@@ -45,11 +55,12 @@ public class MyApplication extends Application {
         return (MyApplication) activity.getApplication();
     }
 
-    public String getUsername() {
-        return username;
+
+    public User getUser() {
+        return user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -2,37 +2,57 @@ package com.pengwang.mybaby.presentation.presenters.impl;
 
 import com.pengwang.mybaby.domain.executor.Executor;
 import com.pengwang.mybaby.domain.executor.MainThread;
-import com.pengwang.mybaby.domain.interactors.GetUserNameInteractor;
+import com.pengwang.mybaby.domain.interactors.GetUserInteractor;
+import com.pengwang.mybaby.domain.interactors.SaveFaceBookUserInteractor;
+import com.pengwang.mybaby.domain.models.User;
 import com.pengwang.mybaby.presentation.presenters.LoginPresenter;
 
 /**
  * Created by Peng on 2/24/2017.
- *
+ * Presenter for Login Activity
  */
 
-public class LoginPresenterImpl extends AbstractPresenter implements LoginPresenter, GetUserNameInteractor.Callback {
+public class LoginPresenterImpl extends AbstractPresenter implements LoginPresenter, GetUserInteractor.Callback,
+        SaveFaceBookUserInteractor.Callback {
     private View view;
-    private GetUserNameInteractor getUserNameInteractor;
+    private GetUserInteractor getUserInteractor;
+    private SaveFaceBookUserInteractor saveFaceBookUserInteractor;
 
     public LoginPresenterImpl(Executor executor, MainThread mainThread, View view) {
         super(executor, mainThread);
-        this.view=view;
+        this.view = view;
+    }
+
+    private void showProgress() {
+        view.showProgress();
     }
 
     @Override
     public void checkLoginStatus() {
-        view.showProgress();
-        getUserNameInteractor.execute();
+        showProgress();
+        getUserInteractor.execute();
+    }
+
+    @Override
+    public void saveFacebookUserInformation(String facebookId, String facebookName) {
+        showProgress();
+        saveFaceBookUserInteractor.setFacebookUserId(facebookId);
+        saveFaceBookUserInteractor.setFacebookUserName(facebookName);
+        saveFaceBookUserInteractor.execute();
     }
 
     @Override
 //    show main activity and add user name to application if has a username otherwise stay login activity
-    public void onUsernameRetrieved(String username) {
-        view.hideProgress();
-        if (username!=null){
-            view.setUsernameToApplication(username);
+    public void onUserRetrieved(User user) {
+        hideProgress();
+        if (user.getName() != null && user.getId() != null) {
+            view.setUserToApplication(user);
             view.showMainActivity();
         }
+    }
+
+    private void hideProgress() {
+        view.hideProgress();
     }
 
     @Override
@@ -53,6 +73,7 @@ public class LoginPresenterImpl extends AbstractPresenter implements LoginPresen
     @Override
     public void destroy() {
 
+
     }
 
     @Override
@@ -61,9 +82,17 @@ public class LoginPresenterImpl extends AbstractPresenter implements LoginPresen
     }
 
 
-    public void setGetUserNameInteractor(GetUserNameInteractor getUserNameInteractor) {
-        this.getUserNameInteractor = getUserNameInteractor;
+    public void setGetUserInteractor(GetUserInteractor getUserInteractor) {
+        this.getUserInteractor = getUserInteractor;
     }
 
+    public void setSaveFaceBookUserInteractor(SaveFaceBookUserInteractor saveFaceBookUserInteractor) {
+        this.saveFaceBookUserInteractor = saveFaceBookUserInteractor;
+    }
 
+    //
+    @Override
+    public void onSaveFaceBookUser(User user) {
+        onUserRetrieved(user);
+    }
 }

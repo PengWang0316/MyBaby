@@ -2,8 +2,10 @@ package com.pengwang.mybaby.presentation.ui.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.widget.TextView;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import com.pengwang.mybaby.R;
 import com.pengwang.mybaby.application.MyApplication;
@@ -26,10 +28,15 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        init();
+            setupToolbar();
+        initiateDagger();
     }
 
-    private void init() {
+    private void setupToolbar() {
+        setSupportActionBar((Toolbar) findViewById(R.id.tool_bar));
+    }
+
+    private void initiateDagger() {
         //        Initiate the main presenter
 //        mMainpresentor = new MainPresenterImpl(ThreadExecutor.getInstance(), MainThreadImpl.getInstance(), this, new
 //                RecordRepositoryImpl());
@@ -42,6 +49,13 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater=getMenuInflater();
+        menuInflater.inflate(R.menu.tool_bar_menu,menu);
+        return true;
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         mainPresenter.resume();
@@ -50,12 +64,12 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
     //The callback after get initial data method
     @Override
     public void showTheInitialData(List<Record> recordList) {
-        TextView textView = (TextView) findViewById(R.id.main_activity_text);
-        String allName = "";
-        for (Record record : recordList) {
-            allName += record.getName() + "  ";
-        }
-        textView.setText(allName);
+//        TextView textView = (TextView) findViewById(R.id.main_activity_text);
+//        String allName = "";
+//        for (Record record : recordList) {
+//            allName += record.getName() + "  ";
+//        }
+//        textView.setText(allName);
     }
 
     @Override

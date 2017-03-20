@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">My Baby</string>
+    <string name="test_menu_item">Test Item</string>
+    <string name="user_name_key">user_name_key</string>
+    <string name="user_id_key">user_id_key</string>
+    <string name="user_facebook_id_key">user_facebook_id_key</string>
+    <string name="user_google_id_key">user_google_id_key</string>
+
+
+    <!--For Facebook logging-->
+    <string name="facebook_app_id">501409366649989</string>
+    <string name="fb_login_protocol_scheme">fb501409366649989</string>
+    <string name="main_background_image_description">The background image for the main screen.</string>
+
 </resources>

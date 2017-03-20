@@ -1,5 +1,6 @@
 package com.pengwang.mybaby.presentation.presenters;
 
+import com.pengwang.mybaby.domain.models.User;
 import com.pengwang.mybaby.presentation.ui.BaseView;
 
 /**
@@ -11,8 +12,9 @@ public interface LoginPresenter extends BasePresenter {
     interface View extends BaseView{
         void showMainActivity();
 
-        void setUsernameToApplication(String username);
+        void setUserToApplication(User user);
     }
 
     void checkLoginStatus();
+    void saveFacebookUserInformation(String facebookId, String facebookName);
 }

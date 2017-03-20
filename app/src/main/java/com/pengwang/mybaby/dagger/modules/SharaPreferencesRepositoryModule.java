@@ -1,8 +1,9 @@
 package com.pengwang.mybaby.dagger.modules;
 
-import com.pengwang.mybaby.dagger.scopes.ApplicationScope;
-import com.pengwang.mybaby.domain.repository.SharaPreferencesRepository;
-import com.pengwang.mybaby.storage.SharaPreferencesRepositoryImpl;
+import android.app.Activity;
+
+import com.pengwang.mybaby.domain.repository.SharePreferencesRepository;
+import com.pengwang.mybaby.storage.SharePreferencesRepositoryImpl;
 
 import dagger.Module;
 import dagger.Provides;
@@ -14,9 +15,8 @@ import dagger.Provides;
 @Module
 public class SharaPreferencesRepositoryModule {
     @Provides
-    @ApplicationScope
-    SharaPreferencesRepository getSharaPreferencesRepository(){
-        return new SharaPreferencesRepositoryImpl();
+    SharePreferencesRepository getSharaPreferencesRepository(Activity activity) {
+        return new SharePreferencesRepositoryImpl(activity);
     }
 
 }
