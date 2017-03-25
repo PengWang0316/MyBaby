@@ -1,5 +1,7 @@
 package com.pengwang.mybaby.presentation.presenters.impl;
 
+import android.support.annotation.NonNull;
+
 import com.pengwang.mybaby.domain.executor.Executor;
 import com.pengwang.mybaby.domain.executor.MainThread;
 import com.pengwang.mybaby.domain.interactors.GetUserInteractor;
@@ -41,9 +43,13 @@ public class LoginPresenterImpl extends AbstractPresenter implements LoginPresen
         saveFaceBookUserInteractor.execute();
     }
 
+
+    /*
+    *   Callback method from GetUserInteractor
+    *   Show main activity and add user name to application if has a username otherwise stay login activity
+    */
     @Override
-//    show main activity and add user name to application if has a username otherwise stay login activity
-    public void onUserRetrieved(User user) {
+    public void onUserRetrieved(@NonNull User user) {
         hideProgress();
         if (user.getName() != null && user.getId() != null) {
             view.setUserToApplication(user);
@@ -90,7 +96,10 @@ public class LoginPresenterImpl extends AbstractPresenter implements LoginPresen
         this.saveFaceBookUserInteractor = saveFaceBookUserInteractor;
     }
 
-    //
+    /*
+    *   Callback method from SaveFaceBookUserInteractor
+    *
+    */
     @Override
     public void onSaveFaceBookUser(User user) {
         onUserRetrieved(user);

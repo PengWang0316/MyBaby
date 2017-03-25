@@ -11,4 +11,5 @@ import com.pengwang.mybaby.domain.models.User;
 public interface SharePreferencesRepository {
     User getUser();
     void saveUser(User user);
+    void removeUser();
 }

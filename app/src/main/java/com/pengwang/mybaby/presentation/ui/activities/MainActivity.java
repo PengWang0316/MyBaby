@@ -1,18 +1,23 @@
 package com.pengwang.mybaby.presentation.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 import com.pengwang.mybaby.R;
 import com.pengwang.mybaby.application.MyApplication;
 import com.pengwang.mybaby.dagger.componets.DaggerMainActivityComponent;
 import com.pengwang.mybaby.dagger.componets.MainActivityComponent;
 import com.pengwang.mybaby.dagger.modules.MainActivityModule;
 import com.pengwang.mybaby.domain.models.Record;
+import com.pengwang.mybaby.domain.models.User;
 import com.pengwang.mybaby.presentation.presenters.MainPresenter;
 
 import java.util.List;
@@ -28,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-            setupToolbar();
+        setupToolbar();
         initiateDagger();
     }
 
@@ -43,15 +48,35 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
 
         //        Initiate the main presenter via dagger
         MainActivityComponent component = DaggerMainActivityComponent.builder().mainActivityModule(new
-                MainActivityModule(this)).applicationComponent(MyApplication.getApplication(this)
+                MainActivityModule(this,this)).applicationComponent(MyApplication.getApplication(this)
                 .getApplicationComponent()).build();
-        component.injectMainActivity(this);
+        component.inject(this);
+    }
+
+
+    /*
+    *   For menu actions.
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logout_menu_item:
+                Log.d(TAG, ">>>>>>>>>>>>>>>>> Logout!! <<<<<<<<<<<<<");
+                mainPresenter.logout(getUserFromApplication());
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private User getUserFromApplication() {
+        return MyApplication.getApplication(this).getUser();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater=getMenuInflater();
-        menuInflater.inflate(R.menu.tool_bar_menu,menu);
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.tool_bar_menu, menu);
         return true;
     }
 
@@ -70,6 +95,22 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
 //            allName += record.getName() + "  ";
 //        }
 //        textView.setText(allName);
+    }
+
+    @Override
+    public void showLoginActivity() {
+//        Check if the user login with Facebook or Google.
+//        also logout from there
+        logoutFromFacebookAndGoogle();
+        startActivity(new Intent(this, LoginActivity.class));
+    }
+
+    private void logoutFromFacebookAndGoogle() {
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        if(accessToken!=null && !accessToken.isExpired()){
+            Log.d(TAG, ">>>>>>>> Log out from Facebook <<<<<<<<<  Token id: "+accessToken.getUserId());
+            LoginManager.getInstance().logOut();
+        }
     }
 
     @Override

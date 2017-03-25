@@ -9,6 +9,7 @@ public class User {
     private String id;
     private String name;
     private String facebookId;
+    private String googleId;
 
 
     public String getId() {
@@ -33,5 +34,13 @@ public class User {
 
     public void setFacebookId(String facebookId) {
         this.facebookId = facebookId;
+    }
+
+    public String getGoogleId() {
+        return googleId;
+    }
+
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
     }
 }

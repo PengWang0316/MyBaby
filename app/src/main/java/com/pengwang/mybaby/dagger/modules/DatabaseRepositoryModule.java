@@ -1,7 +1,7 @@
 package com.pengwang.mybaby.dagger.modules;
 
 import com.pengwang.mybaby.domain.repository.DatabaseRepository;
-import com.pengwang.mybaby.storage.DatabaseRepositoryMysqlImp;
+import com.pengwang.mybaby.storage.DatabaseRepositoryMongodbImp;
 
 import dagger.Module;
 import dagger.Provides;
@@ -14,6 +14,6 @@ import dagger.Provides;
 public class DatabaseRepositoryModule {
     @Provides
     DatabaseRepository getDatabaseRepository(){
-        return new DatabaseRepositoryMysqlImp();
+        return new DatabaseRepositoryMongodbImp();
     }
 }

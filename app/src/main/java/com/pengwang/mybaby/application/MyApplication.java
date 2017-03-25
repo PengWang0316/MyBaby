@@ -3,7 +3,6 @@ package com.pengwang.mybaby.application;
 import android.app.Activity;
 import android.app.Application;
 
-import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.pengwang.mybaby.dagger.componets.ApplicationComponent;
 import com.pengwang.mybaby.dagger.componets.DaggerApplicationComponent;

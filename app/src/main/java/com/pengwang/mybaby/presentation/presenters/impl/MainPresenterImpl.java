@@ -3,7 +3,9 @@ package com.pengwang.mybaby.presentation.presenters.impl;
 import com.pengwang.mybaby.domain.executor.Executor;
 import com.pengwang.mybaby.domain.executor.MainThread;
 import com.pengwang.mybaby.domain.interactors.GetInitialRecordsInteractor;
+import com.pengwang.mybaby.domain.interactors.LogoutInteractor;
 import com.pengwang.mybaby.domain.models.Record;
+import com.pengwang.mybaby.domain.models.User;
 import com.pengwang.mybaby.presentation.presenters.MainPresenter;
 
 import java.util.List;
@@ -13,11 +15,13 @@ import java.util.List;
  * Main presenter implement.
  */
 
-public class MainPresenterImpl extends AbstractPresenter implements MainPresenter, GetInitialRecordsInteractor.Callback {
+public class MainPresenterImpl extends AbstractPresenter implements MainPresenter, GetInitialRecordsInteractor
+        .Callback, LogoutInteractor.Callback {
 
     private MainPresenter.View view;
 //    private RecordRepository recordRepository;
     private GetInitialRecordsInteractor getInitialRecordsInteractor;
+    private LogoutInteractor logoutInteractor;
 
     public MainPresenterImpl(Executor executor, MainThread mainThread, View view) {
         super(executor, mainThread);
@@ -30,19 +34,48 @@ public class MainPresenterImpl extends AbstractPresenter implements MainPresente
     //  Call interactor to get the result.
     @Override
     public void getInitialData() {
-        view.showProgress();
+        showProgress();
 //        use dagger set.
 //        GetInitialRecordsInteractor interactor = new GetInitialRecordsInteractorImpl(mExecutor, mMainThread,
 //                recordRepository, this);
         getInitialRecordsInteractor.execute();
     }
 
-    //    After interactor get the result, this callback will be called to update view
+    /*
+    * Use to logout from the system
+     */
+    @Override
+    public void logout(User userFromApplication) {
+        showProgress();
+        logoutInteractor.execute();
+    }
+
+    /*
+    *  Callback from LogoutInteractor
+     */
+    @Override
+    public void onLogout() {
+        view.showLoginActivity();
+        hideProgress();
+    }
+
+    private void hideProgress() {
+        view.hideProgress();
+    }
+
+    private void showProgress() {
+        view.showProgress();
+    }
+
+    /*
+    *   Callback from GetInitialRecordsInteractor
+    *   After interactor get the result, this callback will be called to update view
+     */
+
     @Override
     public void onInitialRecordsRetrieved(List<Record> recordList) {
-
         view.showTheInitialData(recordList);
-        view.hideProgress();
+        hideProgress();
     }
 
     @Override
@@ -74,4 +107,10 @@ public class MainPresenterImpl extends AbstractPresenter implements MainPresente
     public void setGetInitialRecordsInteractor(GetInitialRecordsInteractor getInitialRecordsInteractor) {
         this.getInitialRecordsInteractor = getInitialRecordsInteractor;
     }
+
+    public void setLogoutInteractor(LogoutInteractor logoutInteractor) {
+        this.logoutInteractor = logoutInteractor;
+    }
+
+
 }

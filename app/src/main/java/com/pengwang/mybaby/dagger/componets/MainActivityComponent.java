@@ -2,6 +2,7 @@ package com.pengwang.mybaby.dagger.componets;
 
 import com.pengwang.mybaby.dagger.modules.MainActivityModule;
 import com.pengwang.mybaby.dagger.modules.RecordRepositoryModule;
+import com.pengwang.mybaby.dagger.modules.SharaPreferencesRepositoryModule;
 import com.pengwang.mybaby.dagger.scopes.MainActivityScope;
 import com.pengwang.mybaby.presentation.ui.activities.MainActivity;
 
@@ -13,8 +14,9 @@ import dagger.Component;
  * Depends on ApplicationComponent
  */
 @MainActivityScope
-@Component (modules = {RecordRepositoryModule.class, MainActivityModule.class}, dependencies = ApplicationComponent.class)
+@Component (modules = {RecordRepositoryModule.class, SharaPreferencesRepositoryModule.class, MainActivityModule.class},
+        dependencies = ApplicationComponent
+        .class)
 public interface MainActivityComponent {
-
-    void injectMainActivity (MainActivity mainActivity);
+    void inject (MainActivity mainActivity);
 }

@@ -11,7 +11,6 @@ public interface LoginPresenter extends BasePresenter {
 
     interface View extends BaseView{
         void showMainActivity();
-
         void setUserToApplication(User user);
     }
 

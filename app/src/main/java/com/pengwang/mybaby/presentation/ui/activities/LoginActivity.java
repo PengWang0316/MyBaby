@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity implements LoginPresenter.V
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        Log.d(TAG, ">>>>>>>>>>>>>>>>> Login Activity <<<<<<<<<<<<<<<<");
         initiateDagger();
 //        TODO check the login status before initialize Facebook and Google login buttons and callback
 //        Now the check and forward code are put in the Resume method.
@@ -49,12 +49,14 @@ public class LoginActivity extends AppCompatActivity implements LoginPresenter.V
 //        registerFacebookLogging();
     }
 
-    //Register the callback object for the Facebook login button
+    /*
+    * Method
+    * Register the callback object for the Facebook login button
+    */
     private void registerFacebookLoginCallback() {
         profileTracker = new ProfileTracker() {
             @Override
             protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
-//                Log.d("dd", ">>>>>>>>>>>>> onCurrentProfileChanged");
                 if (currentProfile != null) {
 //                    Login success. Save the name and id to the SharePreference and Application's User object.
                     Log.d(TAG, ">>>>>>>>>>>>>>>>>>" + currentProfile.getName());
@@ -73,12 +75,10 @@ public class LoginActivity extends AppCompatActivity implements LoginPresenter.V
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "Facebook callback-------Success ");
             }
-
             @Override
             public void onCancel() {
                 Log.d(TAG, "Facebook callback-------Cancel ");
             }
-
             @Override
             public void onError(FacebookException error) {
                 Log.d("dd", "Facebook callback-------Error");
@@ -86,41 +86,16 @@ public class LoginActivity extends AppCompatActivity implements LoginPresenter.V
         });
     }
 
-    //    Process Facebook logging
-//    After login success, should create a account to our application and save it to share Preference
+    //Process Facebook logging
+    //After login success, should create a account to our application and save it to share Preference
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("dd", ">>>>>>>>>>>  onActivityResult  <<<<<<<<<<<<");
-        if (Profile.getCurrentProfile() != null) Log.d(TAG, "2-------" + Profile.getCurrentProfile().getName());
+        Log.d(TAG, ">>>>>>>>>>>  onActivityResult  <<<<<<<<<<<<");
         callbackManager.onActivityResult(requestCode, resultCode, data);
-        if (Profile.getCurrentProfile() != null) Log.d(TAG, "3-------" + Profile.getCurrentProfile().getName());
     }
 
-    /*
-    private void registerFacebookLogging() {
-        LoginManager.getInstance().registerCallback(callbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        Log.d("T", "-----------" + loginResult.getAccessToken().getUserId() + "------" + loginResult
-                                .getRecentlyGrantedPermissions());
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        // App code
-                    }
-
-                    @Override
-                    public void onError(FacebookException exception) {
-                        // App code
-                    }
-                });
-    }
-    */
-
-    //  Initiate dagger dependency injection
+    //Initiate dagger dependency injection
     private void initiateDagger() {
         LoginActivityComponent component = DaggerLoginActivityComponent.builder().loginActivityModule(new
                 LoginActivityModule(this, this)).applicationComponent(MyApplication.getApplication(this)
@@ -155,8 +130,8 @@ public class LoginActivity extends AppCompatActivity implements LoginPresenter.V
     @Override
     public void showProgress() {
 
-    }
 
+}
     @Override
     public void ShowError(String message) {
 

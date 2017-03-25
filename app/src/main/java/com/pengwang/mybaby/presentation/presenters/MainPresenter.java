@@ -1,6 +1,7 @@
 package com.pengwang.mybaby.presentation.presenters;
 
 import com.pengwang.mybaby.domain.models.Record;
+import com.pengwang.mybaby.domain.models.User;
 import com.pengwang.mybaby.presentation.ui.BaseView;
 
 import java.util.List;
@@ -14,7 +15,9 @@ public interface MainPresenter extends BasePresenter{
     interface View extends BaseView{
 //        MainActivity View methods
         void showTheInitialData(List<Record> recordList);
+        void showLoginActivity();
     }
 //    Business logic
     void getInitialData();
+    void logout(User userFromApplication);
 }

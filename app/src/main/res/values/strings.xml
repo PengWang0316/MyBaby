@@ -11,5 +11,6 @@
     <string name="facebook_app_id">501409366649989</string>
     <string name="fb_login_protocol_scheme">fb501409366649989</string>
     <string name="main_background_image_description">The background image for the main screen.</string>
+    <string name="logout_menu_item">Logout Your Account</string>
 
 </resources>
