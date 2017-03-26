@@ -1,7 +1,6 @@
 package com.pengwang.mybaby.storage;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -16,7 +15,6 @@ import com.pengwang.mybaby.domain.repository.SharePreferencesRepository;
  */
 public class SharePreferencesRepositoryImpl implements SharePreferencesRepository {
 
-    private final static String SHARE_PREFERENCES_FILE_NAME="MyBaby_Share_Preferences_File_name";
     private final static String TAG = SharePreferencesRepositoryImpl.class.getName();
     private Activity activity;
     private SharedPreferences sharedPreferences;
@@ -32,11 +30,11 @@ public class SharePreferencesRepositoryImpl implements SharePreferencesRepositor
         user.setName(sharedPreferences.getString(activity.getString(R.string.user_name_key), null));
         user.setId(sharedPreferences.getString(activity.getString(R.string.user_id_key), null));
         user.setFacebookId(sharedPreferences.getString(activity.getString(R.string.user_facebook_id_key),null));
-        user.setGoogleId(sharedPreferences.getString(activity.getString(R.string.user_facebook_id_key),null));
-        Log.d(TAG, ">>>>>>>>>>>>> user id:"+ user.getId());
-        Log.d(TAG, ">>>>>>>>>>>>> user name:"+ user.getName());
-        Log.d(TAG, ">>>>>>>>>>>>> user Facebook id:"+ user.getFacebookId());
-        Log.d(TAG, ">>>>>>>>>>>>> user Google id:"+ user.getGoogleId());
+        user.setGoogleId(sharedPreferences.getString(activity.getString(R.string.user_google_id_key),null));
+        Log.d(TAG, ">>>>>>>>>>>>> user id: "+ user.getId());
+        Log.d(TAG, ">>>>>>>>>>>>> user name: "+ user.getName());
+        Log.d(TAG, ">>>>>>>>>>>>> user Facebook id: "+ user.getFacebookId());
+        Log.d(TAG, ">>>>>>>>>>>>> user Google id: "+ user.getGoogleId());
         return user;
     }
 

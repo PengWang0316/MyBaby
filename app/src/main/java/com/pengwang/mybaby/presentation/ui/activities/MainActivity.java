@@ -99,9 +99,11 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
 
     @Override
     public void showLoginActivity() {
-//        Check if the user login with Facebook or Google.
-//        also logout from there
+//        1. Check if the user login with Facebook or Google.
+//           also logout from there
+//        2. Remove User object from application object.
         logoutFromFacebookAndGoogle();
+        MyApplication.getApplication(this).setUser(null);
         startActivity(new Intent(this, LoginActivity.class));
     }
 

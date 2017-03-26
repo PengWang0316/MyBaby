@@ -1,5 +1,6 @@
 package com.pengwang.mybaby.presentation.ui.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -54,11 +55,16 @@ public class LoginActivity extends AppCompatActivity implements LoginPresenter.V
     * Register the callback object for the Facebook login button
     */
     private void registerFacebookLoginCallback() {
+        final Activity activity=this;
         profileTracker = new ProfileTracker() {
             @Override
             protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
-                if (currentProfile != null) {
+//                TODO the profile will change many times. So the LoginPresenter will be called servial times.
+                if (currentProfile != null && MyApplication.getApplication(activity).getUser()==null &&
+                        loginPresenter.isUnlocked()) {
 //                    Login success. Save the name and id to the SharePreference and Application's User object.
+//                    lock it when the first time profile changed.
+                    loginPresenter.lock();
                     Log.d(TAG, ">>>>>>>>>>>>>>>>>>" + currentProfile.getName());
                     Log.d(TAG, ">>>>>>>>>>>>>>>>>>" + currentProfile.getId());
                     Log.d(TAG, ">>>>>>>>>>>>>>>>>>" + currentProfile.getLinkUri());
@@ -114,6 +120,8 @@ public class LoginActivity extends AppCompatActivity implements LoginPresenter.V
     @Override
     public void setUserToApplication(User user) {
         ((MyApplication) getApplication()).setUser(user);
+//      After save User to application, unlock the presenter.
+        loginPresenter.unlock();
     }
 
     @Override

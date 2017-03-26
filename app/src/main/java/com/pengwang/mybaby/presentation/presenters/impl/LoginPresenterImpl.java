@@ -19,6 +19,7 @@ public class LoginPresenterImpl extends AbstractPresenter implements LoginPresen
     private View view;
     private GetUserInteractor getUserInteractor;
     private SaveFaceBookUserInteractor saveFaceBookUserInteractor;
+    private static boolean isLock=false;
 
     public LoginPresenterImpl(Executor executor, MainThread mainThread, View view) {
         super(executor, mainThread);
@@ -43,6 +44,21 @@ public class LoginPresenterImpl extends AbstractPresenter implements LoginPresen
         saveFaceBookUserInteractor.execute();
     }
 
+    @Override
+    public boolean isUnlocked() {
+        return !isLock;
+    }
+
+    @Override
+    public void lock() {
+        isLock=true;
+    }
+
+    @Override
+    public void unlock() {
+        isLock=false;
+    }
+
 
     /*
     *   Callback method from GetUserInteractor
@@ -51,7 +67,7 @@ public class LoginPresenterImpl extends AbstractPresenter implements LoginPresen
     @Override
     public void onUserRetrieved(@NonNull User user) {
         hideProgress();
-        if (user.getName() != null && user.getId() != null) {
+        if (user.getName() != null && user.getId() != null && !user.getName().equals("") && !user.getId().equals("")) {
             view.setUserToApplication(user);
             view.showMainActivity();
         }
