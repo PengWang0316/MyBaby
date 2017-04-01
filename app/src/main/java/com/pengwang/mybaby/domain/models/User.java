@@ -1,5 +1,8 @@
 package com.pengwang.mybaby.domain.models;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by Peng on 3/19/2017.
  * Use to keep user name, id, and others
@@ -42,5 +45,15 @@ public class User {
 
     public void setGoogleId(String googleId) {
         this.googleId = googleId;
+    }
+
+    public String getJsonString() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("id",id).put("name",name).put("facebookId",facebookId).put("googleId",googleId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
     }
 }

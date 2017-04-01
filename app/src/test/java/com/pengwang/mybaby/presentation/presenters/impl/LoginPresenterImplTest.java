@@ -89,11 +89,33 @@ public class LoginPresenterImplTest {
     }
 
     @Test
-    public void onUsernameRetrievedUser() throws Exception {
+    public void onUsernameRetrievedUserWithEmptyNameAndId() throws Exception {
         LoginPresenterImpl presenter = new LoginPresenterImpl(executor, mainThread, view);
         User user = new User();
         user.setId("");
         user.setName("");
+        presenter.onUserRetrieved(user);
+        verify(view).hideProgress();
+        verifyZeroInteractions(view);
+    }
+
+    @Test
+    public void onUsernameRetrievedUserWithNullNameAndId() throws Exception {
+        LoginPresenterImpl presenter = new LoginPresenterImpl(executor, mainThread, view);
+        User user = new User();
+        user.setId("");
+        user.setName("");
+        presenter.onUserRetrieved(user);
+        verify(view).hideProgress();
+        verifyZeroInteractions(view);
+    }
+
+    @Test
+    public void onUsernameRetrievedUser() throws Exception {
+        LoginPresenterImpl presenter = new LoginPresenterImpl(executor, mainThread, view);
+        User user = new User();
+        user.setId("12");
+        user.setName("test");
         presenter.onUserRetrieved(user);
         verify(view).hideProgress();
         verify(view).setUserToApplication(user);

@@ -3,6 +3,7 @@ package com.pengwang.mybaby.dagger.modules;
 import com.pengwang.mybaby.domain.repository.DatabaseRepository;
 import com.pengwang.mybaby.network.RestConnection;
 import com.pengwang.mybaby.network.impl.HttpUrlConnectionImp;
+import com.pengwang.mybaby.network.impl.HttpsUrlConnectionImp;
 import com.pengwang.mybaby.storage.DatabaseRepositoryMongodbImp;
 
 import dagger.Module;
@@ -21,6 +22,6 @@ public class DatabaseRepositoryModule {
 
     @Provides
     RestConnection getRestConnection(){
-        return new HttpUrlConnectionImp();
+        return new HttpsUrlConnectionImp();
     }
 }

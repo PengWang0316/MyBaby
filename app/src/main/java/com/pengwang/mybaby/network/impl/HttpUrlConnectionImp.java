@@ -25,9 +25,10 @@ public class HttpUrlConnectionImp implements RestConnection {
     @Override
     public String get(@NonNull String httpUrl) {
         StringBuilder output=new StringBuilder();
+        HttpURLConnection connection = null;
         try {
             URL url = new URL(httpUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod(GET_METHOD);
             connection.setRequestProperty(ACCEPT_STRING, APPLICATION_JSON);
 //          If the connection did not receive http 200 response code, throw an exception.
@@ -38,12 +39,19 @@ public class HttpUrlConnectionImp implements RestConnection {
             String stringLine;
             while ((stringLine = reader.readLine()) != null) output.append(stringLine);
 
-            connection.disconnect();
-
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            if (connection!=null) connection.disconnect();
         }
 
         return output.toString();
     }
+
+    @Override
+    public String post(@NonNull String url, @NonNull String bodyString) {
+        return null;
+    }
+
+
 }
