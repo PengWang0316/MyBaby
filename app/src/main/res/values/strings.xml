@@ -13,5 +13,6 @@
     <string name="main_background_image_description">The background image for the main screen.</string>
     <string name="logout_menu_item">Logout Your Account</string>
     <string name="or_dash">---- or ----</string>
+    <string name="user_email_key">user_email_key</string>
 
 </resources>

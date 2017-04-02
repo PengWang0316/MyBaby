@@ -13,6 +13,7 @@ public class User {
     private String name;
     private String facebookId;
     private String googleId;
+    private String email;
 
 
     public String getId() {
@@ -50,10 +51,19 @@ public class User {
     public String getJsonString() {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("id",id).put("name",name).put("facebookId",facebookId).put("googleId",googleId);
+            jsonObject.put("id",id).put("name",name).put("facebookId",facebookId).put("googleId",googleId).put
+                    ("email",email);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return jsonObject.toString();
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -8,6 +8,7 @@ import com.pengwang.mybaby.domain.executor.Executor;
 import com.pengwang.mybaby.domain.executor.MainThread;
 import com.pengwang.mybaby.domain.interactors.impl.GetUserInteractorImpl;
 import com.pengwang.mybaby.domain.interactors.impl.SaveFaceBookUserInteractorImp;
+import com.pengwang.mybaby.domain.interactors.impl.SaveGoogleUserInteractorImp;
 import com.pengwang.mybaby.domain.repository.DatabaseRepository;
 import com.pengwang.mybaby.domain.repository.SharePreferencesRepository;
 import com.pengwang.mybaby.presentation.presenters.LoginPresenter;
@@ -46,12 +47,15 @@ public class LoginActivityModule {
     @Provides
     @LoginActivityScope
     LoginPresenter getLoginPresenter(Executor executor, MainThread mainThread, LoginPresenter.View view,
-                                     SharePreferencesRepository sharePreferencesRepository, DatabaseRepository databaseRepository) {
+                                     SharePreferencesRepository sharePreferencesRepository, DatabaseRepository
+                                             databaseRepository) {
         LoginPresenterImpl presenter = new LoginPresenterImpl(executor, mainThread, view);
         presenter.setGetUserInteractor(new GetUserInteractorImpl(executor, mainThread,
                 sharePreferencesRepository, presenter));
-        presenter.setSaveFaceBookUserInteractor(new SaveFaceBookUserInteractorImp(executor,mainThread,
+        presenter.setSaveFaceBookUserInteractor(new SaveFaceBookUserInteractorImp(executor, mainThread,
                 databaseRepository, sharePreferencesRepository, presenter));
+        presenter.setSaveGoogleUserInteractor(new SaveGoogleUserInteractorImp(executor, mainThread, databaseRepository,
+                sharePreferencesRepository, presenter));
         return presenter;
     }
 

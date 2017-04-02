@@ -29,22 +29,25 @@ public class SharePreferencesRepositoryImpl implements SharePreferencesRepositor
         User user = new User();
         user.setName(sharedPreferences.getString(activity.getString(R.string.user_name_key), null));
         user.setId(sharedPreferences.getString(activity.getString(R.string.user_id_key), null));
-        user.setFacebookId(sharedPreferences.getString(activity.getString(R.string.user_facebook_id_key),null));
-        user.setGoogleId(sharedPreferences.getString(activity.getString(R.string.user_google_id_key),null));
-        Log.d(TAG, ">>>>>>>>>>>>> user id: "+ user.getId());
-        Log.d(TAG, ">>>>>>>>>>>>> user name: "+ user.getName());
-        Log.d(TAG, ">>>>>>>>>>>>> user Facebook id: "+ user.getFacebookId());
-        Log.d(TAG, ">>>>>>>>>>>>> user Google id: "+ user.getGoogleId());
+        user.setFacebookId(sharedPreferences.getString(activity.getString(R.string.user_facebook_id_key), null));
+        user.setGoogleId(sharedPreferences.getString(activity.getString(R.string.user_google_id_key), null));
+        user.setEmail(sharedPreferences.getString(activity.getString(R.string.user_email_key), null));
+        Log.d(TAG, ">>>>>>>>>>>>> user id: " + user.getId());
+        Log.d(TAG, ">>>>>>>>>>>>> user name: " + user.getName());
+        Log.d(TAG, ">>>>>>>>>>>>> user Facebook id: " + user.getFacebookId());
+        Log.d(TAG, ">>>>>>>>>>>>> user Google id: " + user.getGoogleId());
+        Log.d(TAG, ">>>>>>>>>>>>> user email: " + user.getEmail());
         return user;
     }
 
     @Override
     public void saveUser(User user) {
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putString(activity.getString(R.string.user_id_key),user.getId());
-        editor.putString(activity.getString(R.string.user_name_key),user.getName());
-        editor.putString(activity.getString(R.string.user_facebook_id_key),user.getFacebookId());
-        editor.putString(activity.getString(R.string.user_google_id_key),user.getGoogleId());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(activity.getString(R.string.user_id_key), user.getId());
+        editor.putString(activity.getString(R.string.user_name_key), user.getName());
+        editor.putString(activity.getString(R.string.user_facebook_id_key), user.getFacebookId());
+        editor.putString(activity.getString(R.string.user_google_id_key), user.getGoogleId());
+        editor.putString(activity.getString(R.string.user_email_key), user.getEmail());
         editor.apply();
     }
 
@@ -53,11 +56,12 @@ public class SharePreferencesRepositoryImpl implements SharePreferencesRepositor
      */
     @Override
     public void removeUser() {
-        SharedPreferences.Editor editor=sharedPreferences.edit();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove(activity.getString(R.string.user_id_key));
         editor.remove(activity.getString(R.string.user_name_key));
         editor.remove(activity.getString(R.string.user_facebook_id_key));
         editor.remove(activity.getString(R.string.user_google_id_key));
+        editor.remove(activity.getString(R.string.user_email_key));
         editor.apply();
     }
 }

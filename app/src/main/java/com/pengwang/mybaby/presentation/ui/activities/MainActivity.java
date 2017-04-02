@@ -2,6 +2,7 @@ package com.pengwang.mybaby.presentation.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -11,6 +12,11 @@ import android.view.MenuItem;
 
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.pengwang.mybaby.R;
 import com.pengwang.mybaby.application.MyApplication;
 import com.pengwang.mybaby.dagger.componets.DaggerMainActivityComponent;
@@ -42,11 +48,11 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
     }
 
     private void initiateDagger() {
-        //        Initiate the main presenter
-//        mMainpresentor = new MainPresenterImpl(ThreadExecutor.getInstance(), MainThreadImpl.getInstance(), this, new
-//                RecordRepositoryImpl());
+        //Initiate the main presenter
+        //mainPresenter = new MainPresenterImpl(ThreadExecutor.getInstance(), MainThreadImpl.getInstance(), this, new
+        //RecordRepositoryImpl());
 
-        //        Initiate the main presenter via dagger
+        //Initiate the main presenter via dagger
         MainActivityComponent component = DaggerMainActivityComponent.builder().mainActivityModule(new
                 MainActivityModule(this,this)).applicationComponent(MyApplication.getApplication(this)
                 .getApplicationComponent()).build();
@@ -56,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
 
     /*
     *   For menu actions.
+    *   TODO extract menu as an Activity in order to let all activity reuse the code of action bar
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -97,17 +104,24 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
 //        textView.setText(allName);
     }
 
+    /*
+    *   Do not use back end check Token. So, did not save Google login status. Also do not have to log out from Google.
+     */
     @Override
     public void showLoginActivity() {
 //        1. Check if the user login with Facebook or Google.
 //           also logout from there
 //        2. Remove User object from application object.
-        logoutFromFacebookAndGoogle();
-        MyApplication.getApplication(this).setUser(null);
+        MyApplication myApplication = MyApplication.getApplication(this);
+        User user = myApplication.getUser();
+        if (user!=null && user.getFacebookId()!=null && !user.getFacebookId().equals("")) logoutFromFacebook();
+//        else if (user!=null && user.getGoogleId()!=null && !user.getGoogleId().equals("")) logoutFromGoogle();
+//        Do not really need to log out from Google since LoginActivity cleared up
+        myApplication.setUser(null);
         startActivity(new Intent(this, LoginActivity.class));
     }
 
-    private void logoutFromFacebookAndGoogle() {
+    private void logoutFromFacebook() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         if(accessToken!=null && !accessToken.isExpired()){
             Log.d(TAG, ">>>>>>>> Log out from Facebook <<<<<<<<<  Token id: "+accessToken.getUserId());

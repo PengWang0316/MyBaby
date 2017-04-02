@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "536605830486",
+    "project_id": "firebase-mybaby"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:536605830486:android:aa2c46af03de1790",
+        "android_client_info": {
+          "package_name": "com.pengwang.mybaby"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "536605830486-etqgqa85ea6baeu6pfjr288dko3jl6rq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pengwang.mybaby",
+            "certificate_hash": "eb12d2a25425211e08f9f4d5fa272b17df022bfb"
+          }
+        },
+        {
+          "client_id": "536605830486-8idka6tb7oaf2goom2tdcf4kvrmn882j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCs-c2qZxPuun29hcNGc7tr4hQ4jEvTS_k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

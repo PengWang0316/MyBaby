@@ -6,6 +6,7 @@ import com.pengwang.mybaby.domain.executor.Executor;
 import com.pengwang.mybaby.domain.executor.MainThread;
 import com.pengwang.mybaby.domain.interactors.GetUserInteractor;
 import com.pengwang.mybaby.domain.interactors.SaveFaceBookUserInteractor;
+import com.pengwang.mybaby.domain.interactors.SaveGoogleUserInteractor;
 import com.pengwang.mybaby.domain.models.User;
 import com.pengwang.mybaby.presentation.presenters.LoginPresenter;
 
@@ -15,10 +16,11 @@ import com.pengwang.mybaby.presentation.presenters.LoginPresenter;
  */
 
 public class LoginPresenterImpl extends AbstractPresenter implements LoginPresenter, GetUserInteractor.Callback,
-        SaveFaceBookUserInteractor.Callback {
+        SaveFaceBookUserInteractor.Callback, SaveGoogleUserInteractor.Callback {
     private View view;
     private GetUserInteractor getUserInteractor;
     private SaveFaceBookUserInteractor saveFaceBookUserInteractor;
+    private SaveGoogleUserInteractor saveGoogleUserInteractor;
     private static boolean isLock=false;
 
     public LoginPresenterImpl(Executor executor, MainThread mainThread, View view) {
@@ -42,6 +44,15 @@ public class LoginPresenterImpl extends AbstractPresenter implements LoginPresen
         saveFaceBookUserInteractor.setFacebookUserId(facebookId);
         saveFaceBookUserInteractor.setFacebookUserName(facebookName);
         saveFaceBookUserInteractor.execute();
+    }
+
+    @Override
+    public void saveGoogleUserInformation(String googleId, String displayName, String email) {
+        showProgress();
+        saveGoogleUserInteractor.setGoogleId(googleId);
+        saveGoogleUserInteractor.setGoogleName(displayName);
+        saveGoogleUserInteractor.setGoogleEmail(email);
+        saveGoogleUserInteractor.execute();
     }
 
     @Override
@@ -71,6 +82,7 @@ public class LoginPresenterImpl extends AbstractPresenter implements LoginPresen
             view.setUserToApplication(user);
             view.showMainActivity();
         }
+//        TODO should add a new screen to show the login failure and give users another chance to re-login
     }
 
     private void hideProgress() {
@@ -114,10 +126,21 @@ public class LoginPresenterImpl extends AbstractPresenter implements LoginPresen
 
     /*
     *   Callback method from SaveFaceBookUserInteractor
-    *
     */
     @Override
     public void onSaveFaceBookUser(User user) {
         onUserRetrieved(user);
+    }
+
+    /*
+    *   Callback method from SaveGoogleUserInteractor
+    */
+    @Override
+    public void onSaveGoogleUser(User user) {
+        onUserRetrieved(user);
+    }
+
+    public void setSaveGoogleUserInteractor(SaveGoogleUserInteractor saveGoogleUserInteractor) {
+        this.saveGoogleUserInteractor = saveGoogleUserInteractor;
     }
 }

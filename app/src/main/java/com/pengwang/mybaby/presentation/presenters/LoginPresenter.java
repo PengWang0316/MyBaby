@@ -16,6 +16,7 @@ public interface LoginPresenter extends BasePresenter {
 
     void checkLoginStatus();
     void saveFacebookUserInformation(String facebookId, String facebookName);
+    void saveGoogleUserInformation(String id, String displayName, String email);
 //  Using a lock to prevent run the loginPresenter.saveFacebookUserInformation several times due to facebook's
 //  profile will be changed several times during the login.
     boolean isUnlocked();

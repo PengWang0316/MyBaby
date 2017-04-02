@@ -19,6 +19,8 @@ import javax.inject.Inject;
 
 public class MyApplication extends Application {
     private ApplicationComponent applicationComponent;
+//  Save GoogleApiClient object here in order to logout.
+//    private GoogleApiClient googleApiClient;
 
     @Inject
     Executor executor;
@@ -62,4 +64,12 @@ public class MyApplication extends Application {
     public void setUser(User user) {
         this.user = user;
     }
+
+//    public GoogleApiClient getGoogleApiClient() {
+//        return googleApiClient;
+//    }
+//
+//    public void setGoogleApiClient(GoogleApiClient googleApiClient) {
+//        this.googleApiClient = googleApiClient;
+//    }
 }

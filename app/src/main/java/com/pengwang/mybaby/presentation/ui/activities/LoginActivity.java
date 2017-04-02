@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -13,6 +14,11 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.pengwang.mybaby.R;
 import com.pengwang.mybaby.application.MyApplication;
 import com.pengwang.mybaby.dagger.componets.DaggerLoginActivityComponent;
@@ -23,31 +29,60 @@ import com.pengwang.mybaby.presentation.presenters.LoginPresenter;
 
 import javax.inject.Inject;
 
-public class LoginActivity extends AppCompatActivity implements LoginPresenter.View {
+public class LoginActivity extends AppCompatActivity implements LoginPresenter.View, View.OnClickListener {
 
-    private final static String TAG=LoginActivity.class.getName();
+    private final static String TAG = LoginActivity.class.getName();
+    private static final int RC_GOOGLE_SIGN_IN = 9001;
+//    private static final String FACEBOOK_EMAIL_PERMISSION_KEYWORD = "email";
+    private static int RC_FACEBOOK_SIGN_IN;
 
     @Inject
     LoginPresenter loginPresenter;
-
     @Inject
     CallbackManager callbackManager;
 
     private ProfileTracker profileTracker;
+    private GoogleApiClient googleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Log.d(TAG, ">>>>>>>>>>>>>>>>> Login Activity <<<<<<<<<<<<<<<<");
-        initiateDagger();
-//        TODO check the login status before initialize Facebook and Google login buttons and callback
-//        Now the check and forward code are put in the Resume method.
+        Log.d(TAG, ">>>>>>>>>>>>>>>>> Login Activity onCreate() is running<<<<<<<<<<<<<<<<");
 
-//        Register the callback for login button
+        initiateDagger();
+
+        //Now the check and forward code are put in the Resume method.
+
+        //Register the callback for login button
         registerFacebookLoginCallback();
 
-//        registerFacebookLogging();
+        //Prepare Google login
+        prepareGoogleLogin();
+
+        //registerFacebookLogging();
+    }
+
+    /*
+    *   The method that prepare the necessary class for Google Sign in function.
+     */
+    private void prepareGoogleLogin() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, null /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        findViewById(R.id.google_login_button).setOnClickListener(this);
+
+//        MyApplication.getApplication(this).setGoogleApiClient(googleApiClient);
+    }
+
+    private boolean isLogined() {
+        // Check whether application has a user with id.
+        User user = MyApplication.getApplication(this).getUser();
+        return user != null && user.getId() != null && !user.getId().equals("");
     }
 
     /*
@@ -55,12 +90,11 @@ public class LoginActivity extends AppCompatActivity implements LoginPresenter.V
     * Register the callback object for the Facebook login button
     */
     private void registerFacebookLoginCallback() {
-        final Activity activity=this;
+        final Activity activity = this;
         profileTracker = new ProfileTracker() {
             @Override
             protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
-//                TODO the profile will change many times. So the LoginPresenter will be called servial times.
-                if (currentProfile != null && MyApplication.getApplication(activity).getUser()==null &&
+                if (currentProfile != null && MyApplication.getApplication(activity).getUser() == null &&
                         loginPresenter.isUnlocked()) {
 //                    Login success. Save the name and id to the SharePreference and Application's User object.
 //                    lock it when the first time profile changed.
@@ -81,24 +115,64 @@ public class LoginActivity extends AppCompatActivity implements LoginPresenter.V
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "Facebook callback-------Success ");
             }
+
             @Override
             public void onCancel() {
                 Log.d(TAG, "Facebook callback-------Cancel ");
             }
+
             @Override
             public void onError(FacebookException error) {
                 Log.d("dd", "Facebook callback-------Error");
             }
         });
+        //Get the request code for onActivityResult method
+        RC_FACEBOOK_SIGN_IN = ((LoginButton) findViewById(R.id.facebook_login_button)).getRequestCode();
+        /*Request reading email address permission
+        List<String> additionalPermissionList = new LinkedList<>();
+        additionalPermissionList.add(FACEBOOK_EMAIL_PERMISSION_KEYWORD);
+        LoginManager.getInstance().logInWithReadPermissions(this, additionalPermissionList);
+        */
     }
 
-    //Process Facebook logging
-    //After login success, should create a account to our application and save it to share Preference
+    /*
+    *   Process Facebook and Google logging
+    */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG, ">>>>>>>>>>>  onActivityResult  <<<<<<<<<<<<");
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        //Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_FACEBOOK_SIGN_IN) {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+        } else if (requestCode == RC_GOOGLE_SIGN_IN) {
+            handleGoogleSignInResult(data);
+        }
+    }
+
+    private void handleGoogleSignInResult(Intent data) {
+        GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+        Log.d(TAG, ">>>>>>>>>>>>>>> Google sign in handleSignInResult:" + result.isSuccess());
+        if (result.isSuccess()) {
+            //Signed in successfully, show authenticated UI.
+            GoogleSignInAccount acct = result.getSignInAccount();
+            if (acct != null) {
+                Log.d(TAG, ">>>>>>>>>>>> Google id: " + acct.getId());
+                Log.d(TAG, ">>>>>>>>>>>> Google name: " + acct.getDisplayName());
+                Log.d(TAG, ">>>>>>>>>>>> Google email: " + acct.getEmail());
+                Log.d(TAG, ">>>>>>>>>>>> Google account: " + acct.getAccount());
+                if (loginPresenter.isUnlocked()){
+                    loginPresenter.lock();
+                    loginPresenter.saveGoogleUserInformation(acct.getId(), acct.getDisplayName(), acct.getEmail());
+                }
+                //Since we do not use back end code to check the token, the Google connect will be disconnect now.
+                if (googleApiClient.isConnected()){
+                    Auth.GoogleSignInApi.signOut(googleApiClient);
+                    googleApiClient.disconnect();
+                    //googleApiClient.connect();
+                }
+            }
+        }
     }
 
     //Initiate dagger dependency injection
@@ -126,28 +200,47 @@ public class LoginActivity extends AppCompatActivity implements LoginPresenter.V
 
     @Override
     protected void onResume() {
+        Log.d(TAG, ">>>>>>>>>>> Login Activity onResume() is running<<<<<<<<<<<<");
         super.onResume();
-        loginPresenter.resume();
+        // Before initialize everything, check whether the user has already logged in.
+        // If so, forward to main screen directly without initialization
+        if (isLogined()) showMainActivity();
+        else loginPresenter.resume();
     }
 
     @Override
-    public void hideProgress() {
-
-    }
+    public void hideProgress() {}
 
     @Override
-    public void showProgress() {
+    public void showProgress() {}
 
-
-}
     @Override
-    public void ShowError(String message) {
-
-    }
+    public void ShowError(String message) {}
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        profileTracker.stopTracking();
+        if (profileTracker != null) profileTracker.stopTracking();
+    }
+
+    /*
+    *   Conduct when click Google Sign in button
+     */
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.google_login_button:
+                signInGoogle();
+                break;
+        }
+    }
+
+    /*
+    *   The method to deal with Google Sign In
+     */
+    private void signInGoogle() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+        startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN);
     }
 }
+

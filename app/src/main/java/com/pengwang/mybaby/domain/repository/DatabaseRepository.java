@@ -9,4 +9,5 @@ import com.pengwang.mybaby.domain.models.User;
 
 public interface DatabaseRepository {
     void saveFacebookUser(User user);
+    void saveGoogleUser(User user);
 }
